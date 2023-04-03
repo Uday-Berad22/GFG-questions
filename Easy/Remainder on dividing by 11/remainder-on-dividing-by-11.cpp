@@ -13,17 +13,22 @@ class Solution
 {
 
 public:
-    int xmod11(string s)
+    int xmod11(string x)
     {
-        int i=0;
-        int n=s.size();
-        int r=0;
-        int j=1;
-       for(int i=0;i<n;i++){
-           r=r*10;
-           r=((int(s[i])-48)+r)%11;
+       long long odd = 0, even = 0;
+       for(int i = 0; i < x.length(); ++i) {
+           if(i % 2 == 0)
+              odd += (x[i] - '0');
+           else
+              even += (x[i] - '0');
        }
-      return r;
+       
+      
+       long long diff = (odd - even) % 11;
+       if(x.length() % 2 == 0)
+          return abs(diff - 11) % 11;
+   
+       return diff;
     }
 };
 
