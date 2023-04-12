@@ -25,21 +25,19 @@ public:
                 j++;
             }
             else{
-                // prev=ans;
+                prev=prev+count;
                 // cout<<i<<endl;
                 // cout<<count<<endl;
-                pre[i+1]=pre[i]+count;
+                // pre[i+1]=pre[i]+count;
                 count=0;
-                ans=pre[i+1]+ans;
+                ans=prev+ans;
                 i++;
                 
             }
         }
-        // if(i<n/2)
-        // ans=ans+count+prev;
-        // ans=ans+pre[i+1];
+
         if(count!=0){
-             ans=pre[i]+ans+count;
+             ans=prev+ans+count;
              i++;
         }
         if(i<n/2){
