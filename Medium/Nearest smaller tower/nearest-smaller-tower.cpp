@@ -22,12 +22,10 @@ public:
         for(int i=0;i<arr.size();i++){
             if(s.empty()){
             ans[i]=-1;
-            s.push(i);
             }
             else{
                 if(arr[s.top()]<arr[i]){
                     ans[i]=(s.top());
-                    s.push(i);
                 }
                 else{
                     
@@ -38,13 +36,10 @@ public:
                         }
                         s.pop();
                     }
-                    s.push(i);
                 }
             }
+            s.push(i);
         }
-        // for(int i=0;i<ans.size();i++)
-        // cout<<ans[i]<<" ";
-        // cout<<endl;
         stack<int> s2;
         for(int i=n-1;i>=0;i--){
             if(s2.empty()){
@@ -88,7 +83,6 @@ public:
                         ans[i]=s2.top();
                     }
                     }
-                    // s2.push(i);
                 }
                 s2.push(i);
             }
