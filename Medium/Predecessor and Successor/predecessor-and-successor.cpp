@@ -39,34 +39,38 @@ struct Node
 class Solution
 {
     public:
-    void inorder(vector<pair<int,Node *>> &a,Node *root){
-        if(root==NULL) return ;
-        inorder(a,root->left);
-        a.push_back({root->key,root});
-        inorder(a,root->right);
+    void bst(Node *root,int key,int &mn,int &mx ,Node * & mnn,Node * &mxn){
+        if(root==NULL){
+            return;
+        }
+        if((root->key)-key>mn&&((root->key)-key)<0){
+            mnn=root;
+            mn=(root->key)-key;
+        }
+        if((root->key)-key<mx&&((root->key)-key)>0){
+            mxn=root;
+            mx=(root->key)-key;
+        }
+         if((root->key)==key){
+            bst(root->right,key,mn,mx,mnn,mxn);
+             bst(root->left,key,mn,mx,mnn,mxn);
+        }
+            if((root->key)<key){
+            bst(root->right,key,mn,mx,mnn,mxn);
+        }
+        else if((root->key)>key){
+            bst(root->left,key,mn,mx,mnn,mxn);
+        }
+        
     }
     void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
     {
-        vector<pair<int,Node*>>  a;
-        inorder(a,root);
-        vector<int> v;
-        sort(a.begin(),a.end());
-        for(int i=0;i<a.size();i++){
-            v.push_back(a[i].first);
-        }
-        int l=lower_bound(v.begin(),v.end(),key)-v.begin()-1;
-        int h=upper_bound(v.begin(),v.end(),key)-v.begin();
-        if(l<0||v[l]>key){
-            pre=NULL;
-        }else{
-            pre=a[l].second;
-        }
-        if(h>v.size()||v[h]<key){
-            suc=NULL;
-        }
-        else{
-            suc=a[h].second;
-        }
+        Node *mnn=NULL,*mxn=NULL;
+        int mn=INT_MIN;
+        int mx=INT_MAX;
+        bst(root,key,mn,mx,mnn,mxn);
+        pre=mnn;
+        suc=mxn;
     }
 };
 
