@@ -6,9 +6,30 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-  
+  bool check(string &s){
+    int n=s.size();
+    for(int i=0;i<n/2;i++){
+        if(s[i]!=s[n-1-i]){
+            return false;
+        }
+    }
+    return true;
+}
     string longestPalin (string s) {
         int n=s.size();
+    //      int count=0;
+    //  string temp;
+    // for(int i=0;i<n;i++){
+    //     temp="";
+    //     temp.push_back(s[i]);
+    //     for(int j=i+1;j<n;j++){
+    //         temp.push_back(s[j]);
+    //         if(check(temp)){
+    //             count++;
+    //         }
+    //     }
+    // }
+    // return count;
         vector<bool> e(n),o(n);
         for(int i=0;i<n;i++){
             o[i]=true;
