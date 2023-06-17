@@ -19,19 +19,14 @@ class Solution{
     // return the frequency of k
     int findFrequency(queue<int> &q, int k){
         // Your code here
-        queue<int> q2;
         int count=0;
-        while(!q.empty()){
-            q2.push(q.front());
+        int n=q.size();
+        while(n--){
             if(q.front()==k){
                 count++;
             }
+            q.push(q.front());
             q.pop();
-        }
-        while(!q2.empty()){
-            q.push(q2.front());
-           
-            q2.pop();
         }
         return count;
     }
