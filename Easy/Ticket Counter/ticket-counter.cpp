@@ -8,46 +8,34 @@ using namespace std;
 class Solution {
   public:
     int distributeTicket(int N, int k) {
-        // code here
-        vector<int> v;
-        for(int i=0;i<=N+1;i++){
-            v.push_back(i);
+        deque<int> dq;
+        for(int i=1;i<=N;i++){
+            dq.push_back(i);
         }
-        int i,j;
-        i=0;
-        j=N+1;
-        int x=1;
-        int count=0;
-        while(count<N){
-            
-            if(count+k>N){
-                break;
-            }
-            if(x%2!=0){
-                i=i+k;
+        int i=1;
+        int last;
+        while(!dq.empty()){
+            if(i%2!=0){
+                int temp=k;
+                while(temp>0&&dq.size()>0){
+                     last=dq.front();
+                    dq.pop_front();
+                    temp--;
+                }
+                
             }
             else{
-                j=j-k;
+                int temp=k;
+                while(temp>0&&dq.size()>0){
+                     last=dq.back();
+                    dq.pop_back();
+                    temp--;
+                }
+                
             }
-            count=count+k;
-            x++;
+            i++;
         }
-        if(count<N){
-            if(x%2!=0){
-                return j-1;
-            }
-            else{
-                return i+1;
-            }
-        }
-        else{
-            if(x%2!=0){
-                return j;
-            }
-            else{
-                return i;
-            }
-        }
+        return last;
     }
 };
 
