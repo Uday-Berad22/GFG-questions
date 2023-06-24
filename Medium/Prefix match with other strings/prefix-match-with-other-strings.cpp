@@ -9,26 +9,22 @@ using namespace std;
 
 class Solution{   
 public:
-    int klengthpref(string v[], int n, int k, string Pattern){    
-        int ans=0;
+    int klengthpref(string arr[], int n, int k, string str){   
+        int count=0;
         for(int i=0;i<n;i++){
-            // string temp=v[i].first;
-            int count=0;
-            for(int j=0;j<v[i].size();j++){
-                if(j<Pattern.size()&&Pattern[j]==v[i][j]){
-                    count++;
-                    if(count==k){
-                     ans++;
-                 }
-                }
-                else{
+            if(arr[i].size()<k){
+                continue;
+            }
+            int flag=0;
+            for(int j=0;j<k;j++){
+                if(arr[i][j]!=str[j]){
+                    flag=1;
                     break;
                 }
             }
-            
+            if(flag==0) count++;
         }
-       
-        return ans;
+        return count;
     }
 };
 
