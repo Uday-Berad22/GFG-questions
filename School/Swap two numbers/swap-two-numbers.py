@@ -7,9 +7,9 @@
 class Solution:
     def get(self, a, b):
         #code here
-        x=a
-        a=b
-        b=x
+        a=a^b
+        b=a^b
+        a=a^b
         return [a,b]
 
 #{ 
