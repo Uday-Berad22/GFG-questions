@@ -9,11 +9,9 @@ class Solution{
     public:
     int setSetBit(int x, int y, int l, int r){
         // code here
-        for(int i=l-1;i<=r-1;i++){
-            if((y>>i)&1){
-                int temp=(1<<i);
-                x=x|temp;
-            }
+        for(int i=l-1;i<r;i++){
+            if((y>>i)&1)
+            x=(x|(1<<i));
         }
         return x;
     }
