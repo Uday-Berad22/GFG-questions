@@ -16,9 +16,7 @@ class Solution
         }
         for(auto a: m){
             m2[a.second]++;
-        }
-        for(auto a : m2){
-            if(a.second>1) return false;
+            if(m2[a.second]>1) return false;
         }
         return true;
     }
