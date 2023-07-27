@@ -12,38 +12,40 @@ class Solution
 {
     public:
     //Heapify function to maintain heap property.
-    int left(int i){
-        return 2*i+1;
-    }
-    int right(int i){
-        return 2*i+2;
-    }
     void heapify(int arr[], int n, int i)  
     {
-      // Your Code Here
-      int lt=left(i);
-      int rt=right(i);
-      int largest=i;
-      if(lt<n&&arr[lt]>arr[largest]){
-          largest=lt;
-      }
-      if(rt<n&&arr[rt]>arr[largest]){
-          largest=rt;
-      }
-      if(largest!=i){
-          swap(arr[largest],arr[i]);
-          heapify(arr,n,largest);
-      }
+        int li=2*i+1;
+        int ri=2*i+2;
+        int a=INT_MIN;
+        int b=INT_MIN;
+        if(li<0||li>=n){
+            return;
+        }
+        int index=i;
+        if(li<n){
+            a=arr[li];
+        }
+        if(ri<n){
+            b=arr[ri];
+        }
+        if(a>=b&&a>arr[i]){
+            swap(arr[i],arr[li]);
+            heapify(arr,n,li);
+        }
+        else if(b>=a&&b>arr[i]){
+            swap(arr[i],arr[ri]);
+            heapify(arr,n,ri);
+        }
     }
+    
 
     public:
     //Function to build a Heap from array.
     void buildHeap(int arr[], int n)  
     { 
-    // Your Code Here
-    for(int i=(n-2)/2;i>=0;i--){
-        heapify(arr,n,i);
-    }
+        for(int i=(n-1)/2;i>=0;i--){
+            heapify(arr,n,i);
+        }
     }
 
     
@@ -51,7 +53,6 @@ class Solution
     //Function to sort an array using Heap Sort.
     void heapSort(int arr[], int n)
     {
-        //code here
         buildHeap(arr,n);
         for(int i=n-1;i>=1;i--){
             swap(arr[0],arr[i]);
