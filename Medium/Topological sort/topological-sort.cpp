@@ -3,35 +3,60 @@
 using namespace std;
 
 // } Driver Code Ends
-
-
 class Solution
 {
 	public:
 	//Function to return list containing vertices in Topological order. 
-	void dfs(int i,vector<int> &visited,stack<int> &stk,vector<int> adj[]){
-	    if(visited[i]==1) return ;
-	    visited[i]=1;
-	    for(auto j: adj[i]){
-	        if(visited[j]==0)
-	        dfs(j,visited,stk,adj);
-	    }
-	    stk.push(i);
-	}
-	vector<int> topoSort(int v, vector<int> adj[]) 
+	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
-	   stack<int> stk;
-	   vector<int> ans;
-	   vector<int> visited(v,0);
-	   for(int i=0;i<v;i++){
-	       if(visited[i]==0)
-	       dfs(i,visited,stk,adj);
-	   }
-	   while(!stk.empty()){
-	       ans.push_back(stk.top());
-	       stk.pop();
-	   }
-	   return ans;
+	    // code here
+	    unordered_map<int,int> m;
+	    for(int i=0;i<V;i++){
+	    for(auto a: adj[i]){
+	        m[a]++;
+	       // m[a[0]]+=0;
+	       //cout<<a<<" "<<i<<endl;
+	    }
+	    }
+	    vector<pair<int,int> > temp;
+	    vector<int> ans;
+	     for(int i=0;i<V;i++){
+	       m[i]+=0;
+	    }
+	    for(auto a:m ){
+	        temp.push_back({a.second,a.first});
+	    }
+	    sort(temp.begin(),temp.end());
+	   // for(int i=0;i<V;i++){
+	   //    // cout<<temp[i].first<<" "<<temp[i].second<<endl;
+	   //     ans.push_back(temp[i].second);
+	   //    // cout<<ans[i]<<" ";
+	   // }
+	   vector<bool> visited(V,false);
+        queue<int> q;
+	    for(int i=0;i<temp.size();i++){
+	         if(temp[i].first==0){
+	             q.push(temp[i].second);
+	         }
+	    }
+    	    while(!q.empty())
+            {
+                int node=q.front();
+                q.pop();
+                // cout<<node<<" ";
+                ans.push_back(node);
+                visited[node]=true;
+                for(auto a: adj[node]){
+                    if(!visited[a]&&m[a]<=1){
+                        m[a]--;
+                        q.push(a);
+                    }else{
+                        m[a]--;
+                    }
+                }
+            }
+	   // int start
+	    return ans;
 	}
 };
 
