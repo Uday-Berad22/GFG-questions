@@ -12,77 +12,88 @@ using namespace std;
 // } Driver Code Ends
 class Solution 
 {
-     public:
+    public:
     //Function to find a solved Sudoku. 
+    bool check(int val,int i,int j,int grid[9][9]){
+        for(int k=0;k<9;k++){
+            if(grid[k][j]==val) return false;
+        }
+         for(int k=0;k<9;k++){
+            if(grid[i][k]==val) return false;
+        }
+        if(i>=0&&i<3&&j>=0&&j<3){
+            i=0;j=0;
+        }
+        if(i>=3&&i<6&&j>=0&&j<3){
+            i=3;j=0;
+        }
+        if(i>=6&&i<9&&j>=0&&j<3){
+            i=6;j=0;
+        }
+        if(i>=0&&i<3&&j>=3&&j<6){
+            i=0;j=3;
+        }
+        if(i>=3&&i<6&&j>=3&&j<6){
+            i=3;j=3;
+        }
+        if(i>=6&&i<9&&j>=3&&j<6){
+            i=6;j=3;
+        }if(i>=0&&i<3&&j>=6&&j<9){
+            i=0;j=6;
+        }
+        if(i>=3&&i<6&&j>=6&&j<9){
+            i=3;j=6;
+        }
+        if(i>=6&&i<9&&j>=6&&j<9){
+            i=6;j=6;
+        }
+        for(int k=i;k<i+3;k++){
+            for(int l=j;l<j+3;l++){
+                if(grid[k][l]==val) return false;
+            }
+        }
+        return true;
+    }
+    bool my_helper(int i,int j,int grid[9][9]){
+            if(i>=9&&j>=9) return true;
+            bool ans=false;
+            if(j>=9){
+                if(i==8){
+                    return true;
+                }
+                ans=my_helper(i+1,0,grid);
+                return ans;
+            }
+                if(grid[i][j]==0){
+                    for(int val=1;val<=9;val++){
+                    if(check(val,i,j,grid)){
+                     grid[i][j]=val;
+                     ans=my_helper(i,j+1,grid);
+                    if(ans==true) return true;
+                    }
+                    }
+                    grid[i][j]=0;
+                }
+                else{
+                    ans=my_helper(i,j+1,grid);
+                    if(ans==true) return true;
+                }
+        return false;
+    }
     bool SolveSudoku(int grid[N][N])  
     { 
-      int row, col;
-        // If there are no unassigned cells, Sudoku is solved.
-        if (!FindUnassignedLocation(grid, row, col))
-            return true;
-
-        // Try numbers 1 to 9 for the unassigned cell.
-        for (int num = 1; num <= 9; num++) {
-            // If the number is safe to place at the current location.
-            if (isSafe(grid, row, col, num)) {
-                // Assign the number to the current cell.
-                grid[row][col] = num;
-
-                // Recursively solve the rest of the Sudoku.
-                if (SolveSudoku(grid))
-                    return true;
-
-                // If the current assignment does not lead to a solution,
-                // revert the assignment and try the next number.
-                grid[row][col] = 0;
-            }
-        }
-
-        // If no number can be placed in the current cell,
-        // return false to backtrack.
-        return false;
+        // Your code here
+        return my_helper(0,0,grid);
     }
-
+    
     //Function to print grids of the Sudoku.
-    void printGrid(int grid[N][N]) {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                std::cout << grid[i][j] << " ";
+    void printGrid (int grid[N][N]) 
+    {
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                cout<<grid[i][j]<<" ";
             }
         }
-    }
-
-private:
-    // Function to find an unassigned location in the grid.
-    bool FindUnassignedLocation(int grid[N][N], int& row, int& col) {
-        for (row = 0; row < N; row++) {
-            for (col = 0; col < N; col++) {
-                if (grid[row][col] == 0)
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    // Function to check if it's safe to place a number in a cell.
-    bool isSafe(int grid[N][N], int row, int col, int num) {
-        // Check if the number is not present in the current row and column.
-        for (int i = 0; i < N; i++) {
-            if (grid[row][i] == num || grid[i][col] == num)
-                return false;
-        }
-
-        // Check if the number is not present in the 3x3 sub-grid.
-        int subGridRow = row - row % 3;
-        int subGridCol = col - col % 3;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (grid[i + subGridRow][j + subGridCol] == num)
-                    return false;
-            }
-        }
-
-        return true;
     }
 };
 
