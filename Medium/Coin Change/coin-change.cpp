@@ -8,21 +8,18 @@ class Solution {
     long long int count(int coins[], int N, int sum) {
 
         // code here.
-        vector<vector<long long>> dp(N+1,vector<long long> (sum+1,0));
+        vector<long long> dp(sum+1,0);
         for(int i=1;i<=N;i++){
             for(int j=1;j<=sum;j++){
-                if(coins[i-1]>j){
-                    dp[i][j]=dp[i-1][j];
-                    continue;
-                }
+                if(coins[i-1]>j) continue;
                 if(coins[i-1]==j){
-                    dp[i][j]=dp[i-1][j]+1;
+                    dp[j]=dp[j]+1;
                     continue;
                 }
-                dp[i][j]=dp[i-1][j]+dp[i][j-coins[i-1]];
+                dp[j]=dp[j]+dp[j-coins[i-1]];
             }
         }
-        return dp[N][sum];
+        return dp[sum];
     }
 };
 
