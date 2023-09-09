@@ -1,0 +1,160 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// Tree Node
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+// Function to Build Tree
+Node* buildTree(string str)
+{   
+    // Corner Case
+    if(str.length() == 0 || str[0] == 'N')
+            return NULL;
+    
+    // Creating vector of strings from input 
+    // string after spliting by space
+    vector<string> ip;
+    
+    istringstream iss(str);
+    for(string str; iss >> str; )
+        ip.push_back(str);
+        
+    // Create the root of the tree
+    Node* root = new Node(stoi(ip[0]));
+        
+    // Push the root to the queue
+    queue<Node*> queue;
+    queue.push(root);
+        
+    // Starting from the second element
+    int i = 1;
+    while(!queue.empty() && i < ip.size()) {
+            
+        // Get and remove the front of the queue
+        Node* currNode = queue.front();
+        queue.pop();
+            
+        // Get the current node's value from the string
+        string currVal = ip[i];
+            
+        // If the left child is not null
+        if(currVal != "N") {
+                
+            // Create the left child for the current node
+            currNode->left = new Node(stoi(currVal));
+                
+            // Push it to the queue
+            queue.push(currNode->left);
+        }
+            
+        // For the right child
+        i++;
+        if(i >= ip.size())
+            break;
+        currVal = ip[i];
+            
+        // If the right child is not null
+        if(currVal != "N") {
+                
+            // Create the right child for the current node
+            currNode->right = new Node(stoi(currVal));
+                
+            // Push it to the queue
+            queue.push(currNode->right);
+        }
+        i++;
+    }
+    
+    return root;
+}
+
+
+// } Driver Code Ends
+/*The Node structure is defined as
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
+// return the Kth largest element in the given BST rooted at 'root'
+class Solution
+{
+    public:
+    void fun(Node *root,int &k,int &ans){
+        if(root==NULL) return;
+        if(k==0&&ans==-1){
+            ans=root->data;
+            return;
+        }
+        fun(root->left,k,ans);
+        k--;
+        if(k==0&&ans==-1){
+            ans=root->data;
+            return;
+        }
+        if(ans!=-1) return ;
+        fun(root->right,k,ans);
+        if(k==0&&ans==-1){
+            ans=root->data;
+            return;
+        }
+    }
+    void fun1(Node *root,int &count){
+        if(root==NULL) return;
+        count++;
+        fun1(root->left,count);
+        fun1(root->right,count);
+    }
+    int kthLargest(Node *root, int k)
+    {
+        //Your code here
+        int ans=-1;
+        int count=0;
+        fun1(root,count);
+        k=count-k+1;
+        fun(root,k,ans);
+        return ans;
+    }
+};
+
+//{ Driver Code Starts.
+
+int main()
+{
+    int t;
+    cin>>t;
+    getchar();
+    
+    while(t--)
+    {
+        string s;
+        getline(cin,s);
+        Node* head = buildTree(s);
+        
+        int k;
+        cin>>k;
+        getchar();
+        
+        Solution ob;
+        cout << ob.kthLargest( head, k ) << endl;
+    }
+    return 1;
+}
+// } Driver Code Ends
