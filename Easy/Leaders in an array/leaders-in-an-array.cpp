@@ -14,11 +14,10 @@ class Solution{
     vector<int> leaders(int a[], int n){
         // Code here
         vector<int> ans;
-        int ma_x=a[n-1];
-        for(int i=n-1;i>=0;i--)
-        {
-            if(a[i]>=ma_x){
-                ma_x=a[i];
+        int maxi=INT_MIN;
+        for(int i=n-1;i>=0;i--){
+            if(a[i]>=maxi){
+                maxi=max(maxi,a[i]);
                 ans.push_back(a[i]);
             }
         }
