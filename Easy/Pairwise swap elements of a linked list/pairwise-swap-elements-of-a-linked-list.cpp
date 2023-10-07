@@ -35,31 +35,22 @@ struct Node
 class Solution
 {
     public:
+    Node * recurssion(Node *p){
+        if(p==NULL) return NULL;
+        Node *q=NULL;
+        if(p->next) q=p->next;
+        if(q)
+        p->next=recurssion(q->next);
+        if(q)
+        q->next=p;
+        else
+        return p;
+        return q;
+    }
     Node* pairWiseSwap(struct Node* head) 
     {
         Node * p=head;
-        if(p==NULL||p->next==NULL) return head;
-        Node *q=p->next;
-        Node *prev=NULL;
-        while(p!=NULL&&q!=NULL){
-            p->next=q->next;
-            q->next=p;
-            if(prev==NULL){
-                head=q;
-            }
-            else{
-                prev->next=q;
-            }
-            prev=p;
-            if(p)
-            p=p->next;
-            else 
-            break;
-            if(p)
-            q=p->next;
-            else
-            break;
-        }
+        head=recurssion(p);
         return head;
     }
 };
