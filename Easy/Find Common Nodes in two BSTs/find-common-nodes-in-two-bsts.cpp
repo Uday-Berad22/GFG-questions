@@ -81,98 +81,76 @@ Node* buildTree(string str)
 
 // } Driver Code Ends
 
-struct hash_pair {
-    template <class T1, class T2>
-    size_t operator()(const pair<T1, T2>& p) const
-    {
-        auto hash1 = hash<T1>{}(p.first);
-        auto hash2 = hash<T2>{}(p.second);
- 
-        if (hash1 != hash2) {
-            return hash1 ^ hash2;              
-        }
-         
-        // If hash1 == hash2, their XOR is zero.
-          return hash1;
-    }
-};
+
 class Solution
 {
-    vector<int> ans;
-    // unordered_set<int> s;
-    unordered_map<pair<Node*,Node*>,int,hash_pair> m;
     public:
-    //Function to find the nodes that are common in both BST.
-    void fun(Node *root1, Node *root2){
-        if(root1==NULL||root2==NULL) return;
-        // m[{root1,root2}]++;
-        fun(root1->left,root2->left);
-        if(root1->data==root2->data){
-            ans.push_back(root1->data);
-        //     if(m[{root1->left,root2->left}]==0)
-        //     fun(root1->left, root2->left);
-        //     if(m[{root1->right,root2->right}]==0)
-            fun(root1->right, root2->right);
-            return;
-        }
-        else if(root1->data<root2->data){
-            fun(root1->right, root2);
-        }
-        else{
-             fun(root1, root2->right);
-        }
-        // else if(root1->data>root2->data){
-        //     if(m[{root1->left,root2}]==0)
-        //     fun(root1->left, root2);
-        //     if(m[{root1,root2->right}]==0)
-        //     fun(root1, root2->right);
-        // }
-        // else{
-        //     if(m[{root1,root2->left}]==0)
-        //     fun(root1, root2->left);
-        //     if(m[{root1->right,root2}]==0)
-        //     fun(root1->right, root2);
-        // }
-    }
-    void func(vector<int> &a,Node *root){
-        if(root==NULL) return;
-        func(a,root->left);
-        a.push_back(root->data);
-        func(a,root->right);
-    }
+    //Function to find the nodes that are common in both BST. 
     vector <int> findCommon(Node *root1, Node *root2)
     {
-        // fun(root1,root2);
-        // // for(auto &a: s){
-        // //     ans.push_back(a);
-        // // }
-        // sort(ans.begin(),ans.end());
-        // // s.clear();
-        vector<int> a,b;
-        func(a,root1);
-        func(b,root2);
-        // unordered_map<int,int> mp;
-        int i=0;
-        int j=0;
-        while(i<a.size()&&j<b.size()){
-            if(a[i]==b[j]){
-                ans.push_back(a[i]);
-                i++;
-                j++;
-            }
-            else if(a[i]<b[j]){
-                i++;
-            }
-            else{
-                j++;
-            }
-        }
-        return ans;
+        //creating two stacks for inorder traversals of both BST.
+	    stack<Node *> stack1, s1, s2;
+        vector <int> res; 
+        
+	    while (1)
+	    {
+	        //pushing the nodes of first BST in stack s1. 
+		    if (root1)
+		    {
+			    s1.push(root1);
+			    root1 = root1->left;
+		    }
+    		//pushing the nodes of second BST in stack s2.
+		    else if (root2)
+		    {
+			    s2.push(root2);
+			    root2 = root2->left;
+		    }
+		    //when both root1 and root2 become NULL
+		    else if (!s1.empty() && !s2.empty())
+		    {
+    			root1 = s1.top();
+			    root2 = s2.top();
+    			
+	    		//if data at current node in two BST's are same, we 
+	    		//store it in output list.
+		    	if (root1->data== root2->data)
+			    {
+				    res.push_back (root1->data);
+				    //popping element from both stacks.
+				    s1.pop();
+    				s2.pop();
+    				//moving to the inorder successor 
+	    			root1 = root1->right;
+		    		root2 = root2->right;
+			    }
+                //if data at current node of first BST is smaller than that of 
+                //second BST then it's obvious that inorder successors of 
+                //current node can have same value as that of second BST node. 
+    			else if (root1->data< root2->data)
+	    		{
+		    	    //popping element from stack s1.
+		    		s1.pop();
+			    	root1 = root1->right;
+				    
+    				//root2 is set to NULL since we need new nodes of first BST. 
+		    		root2 = NULL;
+			    }
+			    else if (root1->data> root2->data)
+    			{
+    			    //popping element from stack s1.
+	    			s2.pop();
+		    		root2 = root2->right;
+		    		//root1 is set to NULL since we need new nodes of second BST.
+			    	root1 = NULL;
+    			}
+	    	}
+	    	else break;
+	    } 
+	    //returning the output list.
+	    return res;
     }
 };
-
-
-
 
 //{ Driver Code Starts.
 
