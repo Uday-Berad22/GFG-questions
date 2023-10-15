@@ -24,112 +24,33 @@ struct Node
 	Node* left, *right;
 };
 */
-unordered_map<Node*,int> m;
+
 class Solution{
     
     public:
-    // Your are required to complete this function
-    // function should return root of the modified BST
-    int height(Node *root){
-        if(root==NULL) return 0;
-        int x;
-        // if(m.find(root->left)!=m.end())x=m[root->left];
-        x=height(root->left);
-        int y;
-        y=height(root->right);
-        return max(x,y)+1;
+   
+    void inorder(Node *root,vector<Node*> &v){
+        if(root==NULL) return ;
+        inorder(root->left,v);
+        v.push_back(root);
+        inorder(root->right,v);
+        return;
     }
-    int Balance_factor(Node *root){
-        if(root==NULL) return 0;
-        return height(root->left)-height(root->right);
-    }
-    Node * buildBalancedTreeR(Node *root){
-        if(root==NULL) return NULL;
-        if(height(root->left)-height(root->right)>1&&Balance_factor(root->left)>0){
-            Node *temp=root->left->right;
-            Node *p=root->left;
-            root->left->right=root;
-            root->left=temp;
-            return p;
-        }
-        if(height(root->left)-height(root->right)<-1&&Balance_factor(root->right)<0){
-            Node *p=root->right;
-            root->right=p->left;
-            p->left=root;
-            return p;
-        }
-        if(height(root->left)-height(root->right)<-1&&Balance_factor(root->right)>0){
-            Node *p=root->right->left;
-            Node *q=root->right;
-            root->right=p->left;
-            p->left=root;
-            q->left=p->right;
-            p->right=q;
-            return p;
-        }
-         if(height(root->left)-height(root->right)>1&&Balance_factor(root->left)<0){
-            Node *p=root->left->right;
-            Node *q=root->left;
-            q->right=p->left;
-            root->left=p->right;
-            p->right=root;
-            p->left=q;
-            return p;
-        }
+    Node* Buildtree(int si,int ei,vector<Node*> &v){
+        if(ei<si) return NULL;
+        int mid=(si+ei)/2;
+        Node *root=v[mid];
+        v[mid]->left=v[mid]->right=NULL;
+        root->left=Buildtree(si,mid-1,v);
+        root->right=Buildtree(mid+1,ei,v);
         return root;
     }
-    Node* insert(Node *a,Node *root){
-        if(root==NULL){
-            return a;
-        }
-        if((root->data)<(a->data)){
-            root->right=insert(a,root->right);
-        }
-        else{
-            root->left=insert(a,root->left);
-        }
-        return buildBalancedTreeR(root);
-    }
-    // void inorder(Node *root,vector<Node*> &v){
-    //     if(root==NULL) return;
-    //     inorder(root->left,v);
-    //     v.push_back(root);
-    //     inorder(root->right,v);
-    // }
-    
-    // Node* buildBalancedTree(Node* root)
-    // {
-    //   vector<Node*> v;
-    //   inorder(root,v);
-    //   root=NULL;
-    //   for(auto &a: v){
-    //     a->left=NULL;
-    //     a->right=NULL;
-    //     root=insert(a,root);
-    //   }
-    //   return root;
-    // }
-     void inorder(Node* root,vector<int>&nodes){
-        if(root==NULL)return;
-        inorder(root->left,nodes);
-        nodes.push_back(root->data);
-        inorder(root->right,nodes);
-    }
-    Node *createhbst(int left,int right,vector<int>&inorder){
-        if(left>right)return NULL;
-        int mid=(left+right)/2;
-        Node* newroot=new struct Node(inorder[mid]);
-        newroot->left=createhbst(left,mid-1,inorder);
-        newroot->right=createhbst(mid+1,right,inorder);
-        return newroot;
-    }
-    // Your are required to complete this function
-    // function should return root of the modified BST
     Node* buildBalancedTree(Node* root)
     {
-        vector<int>nodes;
-        inorder(root,nodes);
-        return createhbst(0,nodes.size()-1,nodes);
+        vector<Node *> v;
+    	inorder(root,v);
+    	int n=v.size();
+    	return Buildtree(0,n-1,v);
     }
 };
 
