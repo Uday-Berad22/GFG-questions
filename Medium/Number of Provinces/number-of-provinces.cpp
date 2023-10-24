@@ -8,23 +8,23 @@ using namespace std;
 
 class Solution {
   public:
-    void dfs(vector<bool> & visited,vector<vector<int>> &adj,int i){
-        visited[i]=true;
-        for(int j=0;j<adj.size();j++){
-            if(!visited[j]&&adj[i][j]==1){
-                dfs(visited,adj,j);
+    void dfs(vector<bool> &visited,vector<vector<int>> &adj,int n,int node){
+        for(int i=0;i<n;i++){
+            if(adj[node][i]==1&&visited[i]!=true){
+                visited[i]=true;
+                dfs(visited,adj,n,i);
             }
         }
     }
     int numProvinces(vector<vector<int>> adj, int V) {
-        // code here'
+        // code here
+        vector<bool> visited(V,false);
         int count=0;
-        vector<bool > visited(V,false);
-        for(int i=0;i<V;i++){
-                if(!visited[i]){
-                     dfs(visited,adj,i);
-                     count++;
-                }
+        for(int i=0;i<V;i++)
+        if(visited[i]!=true){
+            visited[i]=true;
+            dfs(visited,adj,V,i);
+            count++;
         }
         return count;
     }
