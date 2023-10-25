@@ -7,82 +7,58 @@ using namespace std;
 //User function Template for C++
 
 class Solution {
+
 public:
-    int mini;
-    void dfs(vector<vector<string>> &ans,vector<string> &temp,string str, unordered_map<string,int> &m, unordered_map<int,string> &m2,string &target,vector<int> &distance)
-    {
-        if(str==target){
-            if(temp.size()==mini)
-            ans.push_back(temp);
-            return;
-        }
-        int node=m[str];
-        for(int i=0;i<str.size();i++){
-                char ch=str[i];
-                for(char c='a';c<='z';c++){
-                    if(c==ch) continue;
-                    str[i]=c;
-                    if(m[str]>0&&distance[m[str]]>=distance[node]+1&&temp.size()<mini){
-                        distance[m[str]]=distance[node]+1;
-                        temp.push_back(str);
-                        dfs(ans,temp,str,m,m2,target,distance);
-                        temp.pop_back();
-                    }
-                }
-                str[i]=ch;
-            }
-        return;
-    }
     vector<vector<string>> findSequences(string startWord, string targetWord, vector<string>& wordList) {
         vector<vector<string>> ans;
-        unordered_map<string,int> m;
-        unordered_map<int,string> m2;
-        int start=1;
-        int num=2;
-        int end=-1;
-        mini=INT_MAX;
-        m[startWord]=start;
-        m2[start]=startWord;
-        for(auto &str: wordList ){
-            if(str==startWord)continue;
-            m[str]=num;
-            m2[num]=str;
-            if(str==targetWord) end=num;
-            num++;
-        }
-        if(end==-1) return ans;
-        vector<int> dis(num,1000);
-        vector<string> temp;
-        dis[start]=1;
-        temp.push_back(startWord);
-         
-        vector<int> distance(num,INT_MAX);
-        queue<int> q;
-        q.push(start);
-        distance[start]=1;
+        queue<vector<string>> q;
+        q.push({startWord});
+        unordered_set<string> s(wordList.begin(),wordList.end());
+        vector<string> usedAtLevel;
+        int level=0;
+        int lastLevel=INT_MAX;
+        int lastsize=0;
+        s.erase(startWord);
         while(!q.empty()){
-            int node=q.front();
+            vector<string> temp=q.front();
             q.pop();
-            string str=m2[node];
+            string str=temp.back();
+            // if(str==targetWord) break;
+            if(temp.size()>lastsize){
+                // cout<<temp.size()<<endl;
+                for(auto a: usedAtLevel){
+                    s.erase(a);
+                }
+                lastsize++;
+            }
+             if(str==targetWord&&(ans.size()==0||ans[0].size()==temp.size())){
+                           ans.push_back(temp);
+            }
             for(int i=0;i<str.size();i++){
-                char ch=str[i];
+                char original=str[i];
                 for(char c='a';c<='z';c++){
                     str[i]=c;
-                    if(m[str]>0&&distance[m[str]]>distance[node]+1){
-                        distance[m[str]]=distance[node]+1;
-                        q.push(m[str]);
-                        if(str==targetWord){
-                            mini=distance[m[str]];
-                            break;
-                        }
+                    if(s.find(str)!=s.end()){
+                        temp.push_back(str);
+                        q.push(temp);
+                       
+                        temp.pop_back();
+                        
+                        
+                        usedAtLevel.push_back(str);
                     }
                 }
-                if(mini!=INT_MAX) break;
-                str[i]=ch;
+                str[i]=original;
             }
-            if(mini!=INT_MAX) break;
         }
-        dfs(ans,temp,startWord,m,m2,targetWord,dis);
+        // while(!q.empty()){
+        //     vector<string> temp=q.front();
+        //     q.pop();
+        //     string str=temp.back();
+        //     if(str==targetWord){
+        //         ans.push_back(temp);
+        //     }
+        // }
         return ans;
     }
 };
