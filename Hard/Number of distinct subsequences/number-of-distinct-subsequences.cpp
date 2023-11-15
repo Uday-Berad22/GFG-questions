@@ -5,23 +5,31 @@ using namespace std;
 
 // } Driver Code Ends
 //User function template for C++
-
+int M=1e9+7;
 class Solution{
-    
-    int M=1e9+7;
   public:	
 	int distinctSubsequences(string s)
 	{
 	    // Your code goes here
-	    unordered_map<char,int> m;
-	    vector<int> dp(s.size()+1,0);
-	    dp[0]=1;
 	    int n=s.size();
+	    vector<long long > prefix(n+1,0);
+	    unordered_map<char,int> m;
+	    long long  sum=0;
 	    for(int i=1;i<=n;i++){
-	        dp[i]=((dp[i-1]*1LL*2)-(m.find(s[i-1])!=m.end()?dp[m[s[i-1]]-1]:0)+M)%M;
+	        //-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o
+	        long long  count=sum;
+	        if(m.find(s[i-1])!=m.end()){
+	            count=(count-prefix[m[s[i-1]]-1]+M)%M;
+	        }
+	        else{
+	            count++;
+	        }
 	        m[s[i-1]]=i;
+	        sum=(sum+count)%M;
+	        prefix[i]=sum;
+	       // cout<<sum<<endl;
 	    }
-	    return dp[n];
+	    return (sum+1)%M;
 	}
 };
 
