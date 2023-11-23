@@ -8,19 +8,30 @@ class Solution
 {
     public:
     //Function to return max value that can be put in knapsack of capacity W.
-    int knapSack(int W, int wt[], int val[], int N) 
+    vector<vector<int>> dp;
+    int FindMaximumProfit(int wts[], int profits[], int remainWt, int i,int n)
+{
+    if (remainWt == 0 || i >=n)
     {
-        vector<int> dp(W+1,0);
-        for(int i=0;i<N;i++){
-            for(int j=W;j>=0;j--){
-                if(j-wt[i]>=0)
-                dp[j]=max(dp[j],dp[j-wt[i]]+val[i]);
-                else if(wt[i]<=j){
-                    dp[j]=max(dp[j],val[i]);
-                }
-            }
-        }
-        return dp[W];
+        return 0;
+    }
+    if (dp[remainWt][i] != -1)
+    {
+        return dp[remainWt][i];
+    }
+    // NOT TAKEN
+    int maxi = FindMaximumProfit(wts, profits, remainWt, i + 1,n);
+
+    // TAKEN
+    if (remainWt - wts[i] >= 0)
+        maxi = max(FindMaximumProfit(wts, profits, remainWt - wts[i], i + 1,n) + profits[i], maxi);
+    return dp[remainWt][i] = maxi;
+}
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+       // Your code here
+       dp.assign(W + 1, vector<int>(n + 1, -1));
+       return FindMaximumProfit(wt, val, W, 0,n);
     }
 };
 
