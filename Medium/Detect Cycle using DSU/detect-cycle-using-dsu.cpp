@@ -6,38 +6,94 @@ using namespace std;
 class Solution
 {
     public:
-    //Function to detect cycle using DSU in an undirected graph.
-    int find_set(int i,vector<int> &parent){
-        if(parent[i]==-1) return i;
-        return find_set(parent[i],parent);
+   vector<int> parent;
+    
+    vector<int> rank;
+    
+    int find(int x)
+    {
+        if(parent[x] == x)
+        {
+            return x;
+        }
+        
+        parent[x] = find(parent[x]);
+        
+        return parent[x];
     }
-    void union_set(int x,int y,vector<int> &parent){
-        int s1=find_set(x,parent);
-        int s2=find_set(y,parent);
-        if(s1!=s2){
-            parent[s1]=s2;
+    
+    void union1(int x, int y)
+    {
+        int x_rep = find(x);
+        
+        int y_rep = find(y);
+        
+        if(x_rep == y_rep)
+        {
+            return;
+        }
+        
+        if(rank[x_rep] < rank[y_rep])
+        {
+            parent[x_rep] = y_rep;
+        }
+        
+        else if(rank[x_rep] > rank[y_rep])
+        {
+            parent[y_rep] = x_rep;
+        }
+        
+        else
+        {
+            parent[y_rep] = x_rep;
+            
+            rank[x_rep]++;
         }
     }
-	int detectCycle(int V, vector<int>adj[])
-	{
-	    // Code here
-	   map<pair<int,int>,bool> visited;
-	   vector<int> parent(V,-1);
-	    for(int i=0;i<V;i++){
-	        for(auto nbr: adj[i]){
-	            if(!visited[{i,nbr}]){
-	                int s1=find_set(i,parent);
-                    int s2=find_set(nbr,parent);
-                    if(s1==s2) return 1;
-                    else
-                    union_set(i,nbr,parent);
-                    visited[{nbr,i}]=true;
-	            }
-	        }
-	    }
-	    return 0;
-	}
+    
+    int detectCycle(int V, vector<int>adj[])
+    {
+        parent.resize(V);
+        
+        rank.resize(V);
+        
+        for(int i = 0; i < V; i++)
+        {
+            parent[i] = i;
+            
+            rank[i] = 0;
+        }
+        
+        set<pair<int, int>> s;
+        
+        for(int v = 0; v < V; v++)
+        {
+            for(auto u : adj[v])
+            {
+                if(s.find({u, v}) != s.end() or s.find({v, u}) != s.end())
+                {
+                    continue;
+                }
+                
+                s.insert({u, v});
+                
+                int u_rep = find(u);
+                
+                int v_rep = find(v);
+                
+                if(u_rep == v_rep)
+                {
+                    return true;
+                }
+                
+                union1(u, v);
+            }
+        }
+        
+        return false;
+}
 };
+
 
 //{ Driver Code Starts.
 int main(){
