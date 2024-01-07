@@ -6,66 +6,37 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    int nofmaxsubarray( int arr[], int mid,int N)
-    {
-         int count=1;
-         int sum=0;
-         for(int i=0;i<N;i++)
-         {
-             if(sum+arr[i]>mid)
-             {
-                  count++;
-                 sum=arr[i];
-                
-             }
-             else 
-               sum=sum+arr[i];
-             
-         }
-         
-         return count;
+    bool check(int arr[],long long  mid,int N,int k){
+        long long sum=0;
+        int count=0;
+        for(int i=0;i<N;i++){
+            if(sum+arr[i]<=mid){
+                sum+=arr[i];
+            }
+            else{
+                count++;
+                sum=arr[i];
+            }
+        }
+        count++;
+        return count<=k;
     }
-    int splitArray(int arr[] ,int N, int K) {
+    int splitArray(int arr[] ,int N, int k) {
         // code here
         
-        // Leanr the logic of Binary Search usign the code by Alisha 
-        
-    int* max = max_element(arr, arr + N);
-    int low = *max; 
-    int high=0;
-        for( int i=0;i<N;i++)
-        { 
-            high+=arr[i];
-           
-        }
-        
-        // now using the binary search logic -->
-        int ans=0;
-        while(low<=high)
-        {
-            int mid=(low+high)/2;
-            // make a function to count the noofmaxsubarrypresent ;
-            
-            int n=nofmaxsubarray(arr,mid,N);
-            
-            if(n>K) // ye batayega minimum value ko jo ki humse nhi chye
-            {
-                low=mid+1;
+        long long  low=*max_element(arr,arr+N)-1;
+        long long high=accumulate(arr,arr+N,0)+1;
+        while(high-low>1){
+            long long  mid=(high+low)/2;
+            if(check(arr,mid,N,k)){
+                high=mid;
             }
-            
-            else
-            {
-                ans=mid;
-                high=mid-1;
+            else{
+                low=mid;
             }
         }
-        
-        return ans;
-        
-    
+        return high;
     }
-
-
 };
 
 //{ Driver Code Starts.
