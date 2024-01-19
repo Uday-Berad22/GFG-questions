@@ -31,43 +31,30 @@ public:
 
 class Solution {
   public:
-    vector<vector<int>> kTop(vector<int>& a, int n, int k) {
+    vector<vector<int>> kTop(vector<int>& arr, int N, int k) {
         // code here
-       // vector of size k+1 to store elements
-        vector<int> top(k + 1);
-        vector<vector<int>> ans;
-        // array to keep track of frequency
-        unordered_map<int, int> freq;
-        // iterate till the end of stream
-        for (int m = 0; m < n; m++) {
-            
-            vector<int>temp;
-            // increase the frequency
-            freq[a[m]]++;
-            // store that element in top vector
-            top[k] = a[m];
-            // search in top vector for same element
-            auto it = find(top.begin(), top.end() - 1, a[m]);
-            // iterate from the position of element to zero
-            for (int i = distance(top.begin(), it) - 1; i >= 0; --i) {
-                // compare the frequency and swap if higher
-                // frequency element is stored next to it
-                if (freq[top[i]] < freq[top[i + 1]])
-                    swap(top[i], top[i + 1]);
-                // if frequency is same compare the elements
-                // and swap if next element is high
-                else if ((freq[top[i]] == freq[top[i + 1]])
-                         && (top[i] > top[i + 1]))
-                    swap(top[i], top[i + 1]);
-                else
-                    break;
-            }
-            // print top k elements
-            for (int i = 0; i < k && top[i] != 0; ++i)
-                temp.push_back(top[i]);
-                //cout << top[i] << ' ';
-            ans.push_back(temp);
+        vector<vector<int>> ans(N);
+        unordered_map<int,int> m;
+        priority_queue<pair<int,int>> pq;
+        set<pair<int,int>> s;
+        queue<pair<int,int>> q;
+        bool flag=false;
+        for(int i=0;i<N;i++){
+           auto it =  s.find({m[arr[i]],-1*arr[i]});
+           if(it!=s.end()){
+               s.erase(it);
+           }
+            m[arr[i]]++;
+            s.insert({m[arr[i]],-1*arr[i]});
+             if(s.size()>k){
+                   s.erase(s.begin());
+               }
+           for(auto it=s.begin();it!=s.end();it++){
+               ans[i].push_back(-1*(*it).second);
+           }
         }
+        for(int i=0;i<N;i++)
+          reverse(ans[i].begin(),ans[i].end());
         return ans;
     }
     /*
@@ -96,6 +83,7 @@ Output Difference
 1
 1*/
 };
+
 
 
 //{ Driver Code Starts.
