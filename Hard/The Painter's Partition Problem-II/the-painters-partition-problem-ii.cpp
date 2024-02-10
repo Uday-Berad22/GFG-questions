@@ -7,34 +7,34 @@ using namespace std;
 
 // } Driver Code Ends
 //User function template for C++
-
+#define ll long long 
 class Solution
 {
   public:
-    bool check(int arr[],long long  mid,int N,int k){
-        long long sum=0;
-        long long  count=0;
-        for(int i=0;i<N;i++){
-            if(sum+arr[i]<=mid){
-                sum+=arr[i];
+    bool check(ll mid,int arr[],int k,int n){
+        ll sum=0;
+        int count=1;
+        for(int i=0;i<n;i++){
+            if(arr[i]>mid){
+                return false;
             }
-            else{
+            if(sum+arr[i]>mid){
                 count++;
-                sum=arr[i];
+                sum=0;
             }
-            if(arr[i]>mid) return false;
+            sum+=arr[i];
         }
-        count++;
         return count<=k;
     }
-    long long  minTime(int arr[] ,int N, int k) {
+    long long minTime(int arr[], int n, int k)
+    {
         // code here
-        
-        long long  low=0;
-        long long high=1e9;
+        // return minimum time
+        ll low=0;
+        ll high=1e18;
         while(high-low>1){
-            long long  mid=(high+low)/2;
-            if(check(arr,mid,N,k)){
+            ll mid=low+(high-low)/2;
+            if(check(mid,arr,k,n)){
                 high=mid;
             }
             else{
