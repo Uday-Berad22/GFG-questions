@@ -6,34 +6,37 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in a directed graph.
-    
-bool detect_cycle_in_directed_Graph(vector<int> G[],vector<bool> &visited,int node,vector<bool> &path_stack){
-    visited[node]=true;
-    path_stack[node]=true;
-    bool ans=false;
-    for(auto nbr: G[node]){
-        if(visited[nbr]==true&&path_stack[nbr]==true){
-            return true;
-        }
-        else if(visited[nbr]==false){
-            
-            ans=ans||detect_cycle_in_directed_Graph(G,visited,nbr,path_stack);
-        }
-    }
-    path_stack[node]=false;
-    return ans;
-}
-    bool isCyclic(int V, vector<int> G[]) {
+    	bool toposortDFS(int i,int V,vector<int> adj[],vector<bool> &visited,vector<int> &stk) {
+	    visited[i]=true;
+	    stk[i]=true;
+	    bool ans=true;
+	    for(int j=0;j<adj[i].size();j++){
+	        if(!visited[adj[i][j]]){
+	            ans=ans&&toposortDFS(adj[i][j],V,adj,visited,stk);
+	        }
+	        else if(visited[adj[i][j]]==true && stk[adj[i][j]]==true){
+	            return false;
+	        }
+	    }
+	    stk[i]=false;
+	    return ans;
+	}
+	
+	bool topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here
+	    vector<int> ans;
+	    vector<int> stk(V,false);
+	    vector<bool> visited(V,false);
+	    for(int i=0;i<V;i++)
+    	    if(!visited[i])
+    	        if(toposortDFS(i,V,adj,visited,stk)==false) return false;
+	    return true;
+	}
+    bool isCyclic(int V, vector<int> adj[]) {
         // code here
-        int n=V;
-    vector<bool> visited(n,false);
-    vector<bool> path_stack(n,false);
-    for(int i=0;i<n;i++){
-        if(!visited[i]){
-    if(detect_cycle_in_directed_Graph(G,visited,i,path_stack)){
-        return true;
-    }}}
-    return false;
+        if(topoSort(V,adj)==false) return true;
+        return false;
     }
 };
 
