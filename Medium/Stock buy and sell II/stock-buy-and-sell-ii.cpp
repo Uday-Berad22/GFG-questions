@@ -38,17 +38,19 @@ class Solution {
         int sell=INT_MAX;
         buy=prices[0];
         for(int i=1;i<n;i++){
-            if(prices[i]>buy){
-                profit+=(prices[i]-buy);
+            while(i<n&&prices[i]>prices[i-1]){
+                i++;
+            }
+            profit+=(prices[i-1]-buy);
+            if(i<n){
                 buy=prices[i];
             }
-            else{
-                buy=min(buy,prices[i]);
-            }
+            
         }
-        return profit;
+        return max(0,profit);
     }
 };
+
 
 
 //{ Driver Code Starts.
