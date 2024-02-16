@@ -9,65 +9,68 @@ using namespace std;
 
 class Solution{
   public:
-       int getMaxArea(int a[], int n)
+  long long getMaxArea( vector<long long> &arr, int n)
     {
-        vector<int> ps(n), ns(n);
-        stack<int> st;
-        
-        for(int i=0;i<n;i++)
-        {
-            while(!st.empty() && a[st.top()]>=a[i])
-                st.pop();
-                
-            if(st.empty())
-                ps[i] = -1;
-            else
-                ps[i] = st.top();
-                
-            st.push(i);
+        // Your code here
+        stack<long long> prevSmaller,nextSmaller;
+        vector<long long> v(n),v2(n);
+        v[0]=0;
+        prevSmaller.push(0);
+        int j=n-1;
+        v2[j]=n-1;
+        nextSmaller.push(n-1);
+        j--;
+        for(int i=1;i<n;i++){
+           
+            while(!nextSmaller.empty() && arr[nextSmaller.top()]>=arr[j]){
+                nextSmaller.pop();
+            }
+            if(nextSmaller.empty()){
+                v2[j]=n-1;
+            }
+            else{
+                v2[j]=nextSmaller.top()-1;
+            }
+            nextSmaller.push(j);
+            j--;
         }
-        st = stack<int>();
-        
-        for(int i=n-1;i>=0;i--)
-        {
-            while(!st.empty() && a[st.top()]>=a[i])
-                st.pop();
-                
-            if(st.empty())
-                ns[i] = n;
-            else
-                ns[i] = st.top();
-                
-            st.push(i);
+        long long ans=0;
+        for(int i=0;i<n;i++){
+            while(!prevSmaller.empty() && arr[prevSmaller.top()]>=arr[i]){
+                prevSmaller.pop();
+            }
+            if(prevSmaller.empty()){
+                v[i]=0;
+            }
+            else{
+                v[i]=prevSmaller.top()+1;
+            }
+            prevSmaller.push(i);
+            
+            v2[i]= v2[i]-v[i]+1;
+            ans=max(ans,arr[i]*v2[i]);
         }
         
-        int maxArea = INT_MIN;
-        for(int i=0;i<n;i++)
-        {
-            int area = (ns[i] - ps[i] - 1) * a[i];
-            maxArea = max(area, maxArea);
-        }
-        return maxArea;
+        
+        return ans;
     }
-    
     int maxArea(int M[MAX][MAX], int n, int m) {
-        int cur[m] = {0};
-        int area = 0;
-        
+        // Your code here
+        vector<long long>  histogram(m,0);
+        long long ans=0;
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(M[i][j] == 1)
-                    cur[j] += 1;
-                else 
-                    cur[j] = 0;
+                if(M[i][j]==0){
+                    histogram[j]=0;
+                }
+                else{
+                    histogram[j]++;
+                }
             }
-            int currArea = getMaxArea(cur, m);
-            area = max(currArea, area);
+            ans=max(ans,getMaxArea(histogram,m));
         }
-        
-        return area;
+        return ans;
     }
-
 };
 
 
