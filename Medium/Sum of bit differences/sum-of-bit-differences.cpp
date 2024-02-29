@@ -9,25 +9,33 @@ using namespace std;
 class Solution{
 public:
 	
-	long long sumBitDifferences(int A[], int N) {
+	long long sumBitDifferences(int arr[], int n) {
 	    // code here
-	    vector<long long > a(32,0);
-        for(int i=0;i<N;i++){
-            for(int j=0;j<32;j++){
-                if((A[i]>>j)&1){
-                    a[j]++;
-                }
-            }
-        }
-        long long  count=0;
-         for(int i=0;i<N;i++){
-            for(int j=0;j<32;j++){
-                if(((A[i]>>j)&1)==0&&a[j]!=0){
-                    count+=a[j];
-                }
-            }
-        }
-        return 2*count;
+	    vector<int> v(32,0);
+	    long long ans=0;
+	    for(int i=0;i<n;i++){
+	        int x=arr[i];
+	        for(int j=0;j<32;j++){
+	            if((x>>j)&1){
+	                v[j]++;
+	            }
+	       //     else{
+	       //         ans+=(2*v[j]);
+	       //     }
+	        }
+	    }
+	    for(int i=0;i<n;i++){
+	        int x=arr[i];
+	        for(int j=0;j<32;j++){
+	            if((x>>j)&1){
+	               // v[j]++;
+	            }
+	            else{
+	                ans+=(2*v[j]);
+	            }
+	        }
+	    }
+	    return ans;
 	}
 };
 
