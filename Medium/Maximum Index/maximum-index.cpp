@@ -10,24 +10,26 @@ class Solution{
     // A[]: input array
     // N: size of array
     // Function to find the maximum index difference.
-    int maxIndexDiff(int A[], int N) 
+    int maxIndexDiff(int a[], int n) 
     { 
         // Your code here
-        vector<int> v(N,0);
-        v[N-1]=A[N-1];
-        for(int i=N-2;i>=0;i--){
-            v[i]=max(v[i+1],A[i]);
+        vector<int> v1(n),v2(n);
+        v1[0]=a[0];
+        for(int i=1;i<n;i++){
+            v1[i]=min(v1[i-1],a[i]);
         }
+        v2[n-1]=a[n-1];
+        for(int i=n-2;i>=0;i--){
+            v2[i]=max(v2[i+1],a[i]);
+        }
+        int i=0;
+        int j=1;
         int ans=0;
-        for(int i=0;i<N-1;i++){
-            if(v[i+1]>=A[i]){
-                for(int j=N-1;j>=i;j--){
-                    if(A[j]>=A[i]) { 
-                        ans=max(j-i,ans);
-                    }
-                }
+        for(int i=0;i<n && j<n;i++){
+            while(j<n && v2[j]>=v1[i]){
+                ans=max(ans,j-i);
+                j++;
             }
-            if(ans>N-i) return ans;
         }
         return ans;
     }
