@@ -7,85 +7,67 @@ using namespace std;
 class Solution
 {
     public:
-    void precomputeFunction(vector<int> &precomputeArr, string &s2)
-{
-    int len = 0;
-    int index = 1;
-    int m = s2.size();
-    while (index < m)
-    {
-        if (s2[len] == s2[index])
+        vector <int> search(string pat, string txt)
         {
-            len++;
-            precomputeArr[index] = len;
-            index++;
+            vector<int> res;
+            int q =101;
+            int d = 26;
+            int M = pat.size();  
+            int N = txt.size();  
+            int i, j;  
+            int p = 0; // hash value for pattern  
+            int t = 0; // hash value for txt  
+            int h = 1;  
+          
+            // The value of h would be "pow(d, M-1)%q"  
+            for (i = 0; i < M - 1; i++)  
+                h = (h * d) % q;  
+          
+            // Calculate the hash value of pattern and first  
+            // window of text  
+            for (i = 0; i < M; i++)  
+            {  
+                p = (d * p + pat[i]) % q;  
+                t = (d * t + txt[i]) % q;  
+            }  
+          
+            // Slide the pattern over text one by one  
+            for (i = 0; i <= N - M; i++)  
+            {  
+          
+                // Check the hash values of current window of text  
+                // and pattern. If the hash values match then only  
+                // check for characters on by one  
+                if ( p == t )  
+                {  
+                    /* Check for characters one by one */
+                    for (j = 0; j < M; j++)  
+                    {  
+                        if (txt[i+j] != pat[j])  
+                            break;  
+                    }  
+          
+                    // if p == t and pat[0...M-1] = txt[i, i+1, ...i+M-1]  
+                    if (j == M)  
+                        res.push_back(i+1);  
+                }  
+          
+                // Calculate hash value for next window of text: Remove  
+                // leading digit, add trailing digit  
+                if ( i < N-M )  
+                {  
+                    t = (d*(t - txt[i]*h) + txt[i+M])%q;  
+          
+                    // We might get negative value of t, converting it  
+                    // to positive  
+                    if (t < 0)  
+                    t = (t + q);  
+                }  
+            }  
+            return res;
         }
-        else
-        {
-            if (len != 0)
-            {
-                len = precomputeArr[len - 1];
-            }
-            else
-            {
-                precomputeArr[index] = 0;
-                index++;
-            }
-        }
-    }
-}
 
-vector<int> search1(string s2, string s1)
-{
-    int count = 0;
-    int n = s1.size();
-    int m = s2.size();
-    vector<int> precomputeArr(m, 0);
 
-    precomputeFunction(precomputeArr, s2);
-    int i = 0;
-    int j = 0;
-    vector<int> ans;
-    int c = 0;
-    int round = 0;
-    while (i<n)
-    {
-
-        if (s1[i ] == s2[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            if (j == 0)
-            {
-                i++;
-            }
-            else
-            {
-                j = precomputeArr[j - 1];
-            }
-        }
-
-        if (j == m)
-        {
-            count++;
-         
-
-            ans.push_back((i - j+1));
-
-            j = precomputeArr[j - 1];
-        }
-    }
-    return ans;
-}
-        vector <int> search(string pattern, string text)
-        {
-            //code here.
-            return search1(pattern, text);
-        }
-     
 };
 
 //{ Driver Code Starts.
