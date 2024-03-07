@@ -5,32 +5,41 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-   string longestSubstring(string s, int n) {
-        // code here
-        int window_size=1;
-        string sub_str="";
-        string result;
-        
-        for(int i=0;i<n;i++){
-            while(sub_str.length()!=window_size){
-                sub_str+=s[i];
+   string longestSubstring(string& S, int N) {
+    // Initialize variables to store the maximum length, answer, and pointers
+    int max = 0;
+    string ans = "-1";
+    int i = 0;
+    int j = 0;
+
+    // Iterate through the string until one of the pointers reaches the end
+    while (i < N && j < N) {
+        // Extract the current substring from index i to j
+        string subString = S.substr(i, j - i + 1);
+
+        // Check if the current substring occurs again in the remaining part of the string
+        if (S.find(subString, j + 1) != string::npos) {
+            // Calculate the length of the current substring
+            int len = subString.length();
+
+            // If the length is greater than the current maximum, update the answer
+            if (len > max) {
+                ans = subString;
+                // Update the maximum length
+                max = len;
             }
-            
-            size_t found=s.find(sub_str,i+1);
-            if(found != string::npos){
-                window_size++;
-                result=sub_str;
-            }
-            
-            else{
-                sub_str.erase(0,1);
-            }
+        } else {
+            // If the current substring is not found again, move the starting pointer i to the next position
+            i++;
         }
-        
-        if(result.length()==0) return "-1";
-        return result;
+
+        // Move the ending pointer j to the next character
+        j++;
     }
 
+    // Return the final answer
+    return ans;
+}
 
 };
 
