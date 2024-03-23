@@ -6,32 +6,25 @@ using namespace std;
 // } Driver Code Ends
 class Solution
 {
-    public:
-    //Function to return max value that can be put in knapsack of capacity W.
-    vector<vector<int>> dp;
-    int FindMaximumProfit(int wts[], int profits[], int remainWt, int i,int n)
-{
-    if (remainWt == 0 || i >=n)
-    {
-        return 0;
+    
+      public:
+    int dp[1001][1001];
+    int f(int w[], int v[], int n, int tw, int i, int value){
+        if(i>=n || tw==0) return 0;
+        if(dp[i][tw] != -1) return dp[i][tw];
+        // take if possible
+        int a=0;
+        if(w[i] <= tw){
+            a = f(w,v,n,tw-w[i],i+1,value)+v[i];
+        }
+        int b = f(w,v,n,tw,i+1,value);
+        return dp[i][tw] = max(a,b);
     }
-    if (dp[remainWt][i] != -1)
-    {
-        return dp[remainWt][i];
-    }
-    // NOT TAKEN
-    int maxi = FindMaximumProfit(wts, profits, remainWt, i + 1,n);
+    int knapSack(int tw, int w[], int v[], int n) { 
+        // vector<vector<int>> dp(n+1, vector<int>(W+1, -1));
+        memset(dp,-1,sizeof(dp));
+       return f(w,v,n,tw,0,0);
 
-    // TAKEN
-    if (remainWt - wts[i] >= 0)
-        maxi = max(FindMaximumProfit(wts, profits, remainWt - wts[i], i + 1,n) + profits[i], maxi);
-    return dp[remainWt][i] = maxi;
-}
-    int knapSack(int W, int wt[], int val[], int n) 
-    { 
-       // Your code here
-       dp.assign(W + 1, vector<int>(n + 1, -1));
-       return FindMaximumProfit(wt, val, W, 0,n);
     }
 };
 
