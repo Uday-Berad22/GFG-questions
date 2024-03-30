@@ -1,4 +1,6 @@
 //{ Driver Code Starts
+// Initial Template for C++
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -7,6 +9,7 @@ struct Node {
     struct Node* left;
     struct Node* right;
 };
+
 // Utility function to create a new Tree Node
 Node* newNode(int val) {
     Node* temp = new Node;
@@ -16,17 +19,20 @@ Node* newNode(int val) {
 
     return temp;
 }
+
 // Function to Build Tree
 Node* buildTree(string str) {
     // Corner Case
-    if (str.length() == 0 || str[0] == 'N') return NULL;
+    if (str.length() == 0 || str[0] == 'N')
+        return NULL;
 
     // Creating vector of strings from input
     // string after spliting by space
     vector<string> ip;
 
     istringstream iss(str);
-    for (string str; iss >> str;) ip.push_back(str);
+    for (string str; iss >> str;)
+        ip.push_back(str);
 
     // Create the root of the tree
     Node* root = newNode(stoi(ip[0]));
@@ -58,7 +64,8 @@ Node* buildTree(string str) {
 
         // For the right child
         i++;
-        if (i >= ip.size()) break;
+        if (i >= ip.size())
+            break;
         currVal = ip[i];
 
         // If the right child is not null
@@ -76,27 +83,13 @@ Node* buildTree(string str) {
     return root;
 }
 
-int minValue(Node* root);
 
-int main() {
-
-    int t;
-    scanf("%d ", &t);
-    while (t--) {
-        string s;
-        getline(cin, s);
-        Node* root = buildTree(s);
-        cout << minValue(root) << endl;
-    }
-    return 1;
-}
 // } Driver Code Ends
-
+// User function Template for C++
 
 // Function to find the minimum element in the given BST.
 
-/*
-struct Node {
+/* struct Node {
     int data;
     struct Node* left;
     struct Node* right;
@@ -111,9 +104,34 @@ Node* newNode(int val) {
     return temp;
 }
 */
-int minValue(Node* root) {
-    // Code here
-    if(root==NULL) return -1;
-    if(root->left==NULL) return root->data;
-    return  minValue(root->left);
+
+class Solution {
+  public:
+    int minValue(Node* root) {
+        // Code here
+        int x=root->data;
+        while(root!=NULL){
+            x=root->data;
+            root=root->left;
+        }
+        return x;
+    }
+};
+
+
+//{ Driver Code Starts.
+
+int main() {
+
+    int t;
+    scanf("%d ", &t);
+    while (t--) {
+        string s;
+        getline(cin, s);
+        Node* root = buildTree(s);
+        Solution ob;
+        cout << ob.minValue(root) << endl;
+    }
+    return 1;
 }
+// } Driver Code Ends
