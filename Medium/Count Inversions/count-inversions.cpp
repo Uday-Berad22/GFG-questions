@@ -9,91 +9,65 @@ class Solution{
     // arr[]: Input Array
     // N : Size of the Array arr[]
     // Function to count inversions in the array.
-    long long  count=0;
-    void merge(long long array[], long long  const left, long long  const mid,
-           long long  const right)
-{
-    long long  const subArrayOne = mid - left + 1;
-    long long  const subArrayTwo = right - mid;
- 
-    // Create temp arrays
-    auto *leftArray = new long long [subArrayOne],
-         *rightArray = new long long [subArrayTwo];
- 
-    // Copy data to temp arrays leftArray[] and rightArray[]
-    for (auto i = 0; i < subArrayOne; i++)
-        leftArray[i] = array[left + i];
-    for (auto j = 0; j < subArrayTwo; j++)
-        rightArray[j] = array[mid + 1 + j];
- 
-    auto indexOfSubArrayOne = 0, indexOfSubArrayTwo = 0;
-    long long  indexOfMergedArray = left;
- 
-    // Merge the temp arrays back into array[left..right]
-    long long  temp=0;
-    while (indexOfSubArrayOne < subArrayOne
-           && indexOfSubArrayTwo < subArrayTwo) {
-        if (leftArray[indexOfSubArrayOne]
-            <= rightArray[indexOfSubArrayTwo]) {
-            count+=(temp);
-            array[indexOfMergedArray]
-                = leftArray[indexOfSubArrayOne];
-            indexOfSubArrayOne++;
+      void merge(long long  arr[],long long n,int si,int mid,int ei,long long  &count){
+         vector<long long > leftPart;
+         for(int i=si;i<=mid;i++){
+             leftPart.push_back(arr[i]);
+         }
+         vector<long long > rightPart;
+         for(int i=mid+1;i<=ei;i++){
+             rightPart.push_back(arr[i]);
+         }
+         int i=si;
+         int j=0;
+         int k=0;
+         int c1=0;
+         int c2=0;
+        while(j<leftPart.size() && k<rightPart.size()){
+            if(leftPart[j]<=rightPart[k]){
+                arr[i]=leftPart[j];
+                j++;
+            }
+            else{
+                arr[i]=rightPart[k];
+                count+=(leftPart.size()-j);
+                k++;
+            }
+            i++;
         }
-        else {
-            array[indexOfMergedArray]
-                = rightArray[indexOfSubArrayTwo];
-            indexOfSubArrayTwo++;
-            temp++;
+        while(j<leftPart.size()){
+            arr[i]=leftPart[j];
+            j++;
+            i++;
         }
-        indexOfMergedArray++;
+        while(k<rightPart.size()){
+            arr[i]=rightPart[k];
+            k++;
+            i++;
+        }
+        // count+=(c1*c2);
     }
- 
-    // Copy the remaining elements of
-    // left[], if there are any
-    while (indexOfSubArrayOne < subArrayOne) {
-        count+=subArrayTwo;
-        array[indexOfMergedArray]
-            = leftArray[indexOfSubArrayOne];
-        indexOfSubArrayOne++;
-        indexOfMergedArray++;
+    void MergeSort(long long arr[],long long  n,int si,int ei,long long  &count){
+        if(si>=ei){
+            return;
+        }
+        int mid=(si+ei)/2;
+        MergeSort(arr,n,si,mid,count);
+        MergeSort(arr,n,mid+1,ei,count);
+        merge(arr,n,si,mid,ei,count);
     }
- 
-    // Copy the remaining elements of
-    // right[], if there are any
-    while (indexOfSubArrayTwo < subArrayTwo) {
-        array[indexOfMergedArray]
-            = rightArray[indexOfSubArrayTwo];
-        indexOfSubArrayTwo++;
-        indexOfMergedArray++;
-    }
-    delete[] leftArray;
-    delete[] rightArray;
-}
- 
-// begin is for left index and end is right index
-// of the sub-array of arr to be sorted
-void mergeSort(long long array[], long long  const begin, long long  const end)
-{
-    if (begin >= end)
-        return;
- 
-    long long  mid = begin + (end - begin) / 2;
-    mergeSort(array, begin, mid);
-    mergeSort(array, mid + 1, end);
-    merge(array, begin, mid, end);
-}
- 
-    long long int inversionCount(long long arr[], long long N)
+
+    long long int inversionCount(long long arr[], long long n)
     {
         // Your Code Here
-        count=0;
-        mergeSort(arr,0,N-1);
+        int si=0;
+        int ei=n-1;
+        long long count=0;
+        MergeSort(arr,n,si,ei,count);
         return count;
     }
 
 };
-
 
 //{ Driver Code Starts.
 
