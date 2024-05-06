@@ -113,28 +113,27 @@ int main()
      Node* left, *right;
 }; */
 
+void dfs(Node* root,vector<int> &v){
+    if(root==NULL) return;
+    if(root->left==NULL && root->right!=NULL){
+        v.push_back(root->right->data);
+    }
+    if(root->left!=NULL && root->right==NULL){
+        v.push_back(root->left->data);
+    }
+    dfs(root->left,v);
+    dfs(root->right,v);
+    return;
+}
+
 vector<int> noSibling(Node* node)
 {
-    queue<Node *> q;
-    vector<int> ans;
-    q.push(node);
-    while(!q.empty()){
-        Node *p=q.front();
-        q.pop();
-        if(p->left!=NULL){
-            if(p->right==NULL){
-                ans.push_back(p->left->data);
-            }
-            q.push(p->left);
-        }
-        if(p->right!=NULL){
-            if(p->left==NULL){
-                ans.push_back(p->right->data);
-            }
-            q.push(p->right);
-        }
-    }
-    sort(ans.begin(),ans.end());
-    if(ans.size()==0) return {-1};
-    return ans;
+    // code here
+    vector<int> v;
+     dfs(node,v);
+     sort(v.begin(),v.end());
+     if(v.size()==0){
+         return {-1};
+     }
+    return v;
 }
