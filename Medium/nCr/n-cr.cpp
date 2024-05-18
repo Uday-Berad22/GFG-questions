@@ -17,10 +17,12 @@ public:
         }
         if(dp[n][r]!=-1){
             return dp[n][r];
-        }  
+        }
+        
         return dp[n][r]=(nCr(n-1,r)+nCr(n-1,r-1))%M;
     }
 };
+
 
 //{ Driver Code Starts.
 
