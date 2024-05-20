@@ -6,18 +6,19 @@ using namespace std;
 class Solution
 {
 	public:
-		long long int PowMod(long long int a,long long int b,long long int N)
+		long long int PowMod(long long int x,long long int n,long long int M)
 		{
-         long long  ans=1;
-         while(b){
-        if(b&1){
-            ans=(ans*1LL*a)%N;
-        }
-        a=(a*1LL*a)%N;
-        b>>=1;
-          }
-    return ans;
-    }
+		    // Code here
+		    if(n==1){
+		        return x;
+		    }
+		    if(n==0) return 1;
+		    long long  halfpower=PowMod(x,n/2,M)%M;
+		    if(n&1){
+		        return (((halfpower*x)%M)*halfpower)%M;
+		    }
+		    return (halfpower*halfpower)%M;
+		}
 };
 
 //{ Driver Code Starts.
