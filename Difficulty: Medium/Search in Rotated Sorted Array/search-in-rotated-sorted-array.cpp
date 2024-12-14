@@ -8,23 +8,26 @@ class Solution {
   public:
     int search(vector<int>& arr, int key) {
         // complete the function here
-        int p=0;
-        for(int i=1;i<arr.size();i++){
-            if(arr[i]<arr[i-1]) {p=i;break;}
-        }
-        int left=0,right=p-1;
-        while(left<=right){
-            int mid=(left+right)/2;
+        int n=arr.size();
+        int low=0;
+        int high=n-1;
+        while(low<=high){
+            int mid=(low+((high-low)/2));
             if(arr[mid]==key) return mid;
-            else if(arr[mid]>key) right--;
-            else left++;
-        }
-        left=p;right=arr.size()-1;
-        while(left<=right){
-            int mid=(left+right)/2;
-            if(arr[mid]==key) return mid;
-            else if(arr[mid]>key) right--;
-            else left++;
+            //check left part is sorted and the key is lies in between that
+            if(arr[low]<=arr[mid] ){
+                if(key>=arr[low] && key<arr[mid])
+                    high=mid-1;
+                else
+                    low=mid+1;
+            }
+            //find in right
+            else{
+                if(key>arr[mid] && key<=arr[high])
+                    low=mid+1;
+                else 
+                    high=mid-1;
+            }
         }
         return -1;
     }
@@ -48,6 +51,7 @@ int main() {
         cin >> key;
         Solution ob;
         cout << ob.search(arr, key) << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
