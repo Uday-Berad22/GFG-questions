@@ -15,21 +15,27 @@ class Solution {
         if(n<r){
             return 0;
         }
-        long long ans=1;
-        long long  den=1;
-        r=min(r,n-r);
-        while(r>0){
-            ans=(ans*n);
-            den=den*r;
-            if(ans%den==0){
-                ans=ans/den;
-                den=1;
-            }
+        // long long ans=1;
+        // long long  den=1;
+        // r=min(r,n-r);
+        // while(r>0){
+        //     ans=(ans*n);
+        //     den=den*r;
+        //     if(ans%den==0){
+        //         ans=ans/den;
+        //         den=1;
+        //     }
             
-            n--;
-            r--;
+        //     n--;
+        //     r--;
+        // }
+        // return ans/den;
+        double ans=1;
+        for(int i=1;i<=r;i++){
+            ans=ans*(n-r+i)/i;
+            // n--;
         }
-        return ans/den;
+        return (int)ans;
     }
 };
 
